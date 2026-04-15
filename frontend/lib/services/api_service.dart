@@ -1,11 +1,13 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io' show Platform;
 import 'package:http/http.dart' as http;
 
 class ApiService {
   static String get baseUrl {
-    if (Platform.isAndroid) return 'http://10.0.2.2:8000/api/v1';
-    if (Platform.isIOS) return 'http://127.0.0.1:8000/api/v1';
+    try {
+      if (Platform.isAndroid) return 'http://10.0.2.2:8000/api/v1';
+      if (Platform.isIOS) return 'http://127.0.0.1:8000/api/v1';
+    } catch (_) {}
     return 'http://localhost:8000/api/v1';
   }
 

@@ -25,28 +25,46 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Create Android project files
-        working-directory: frontend
-        run: |
-          flutter create --project-name zhakass_fashion --platforms android .
+      - name: Create fresh Flutter project
+        run: flutter create --project-name zhakass_fashion build_project
 
-      - name: Set minSdkVersion for flutter_secure_storage
-        working-directory: frontend/android/app
+      - name: Replace lib and pubspec with project source
         run: |
-          sed -i 's/minSdk flutter.minSdkVersion/minSdk 21/' build.gradle
-          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdk 21/' build.gradle
+          rm -rf build_project/lib
+          cp -r frontend/lib build_project/lib
+          cp frontend/pubspec.yaml build_project/pubspec.yaml
+
+      - name: Copy assets
+        run: |
+          mkdir -p build_project/assets/images build_project/assets/videos
+          if [ -d frontend/assets/images ]; then
+            cp -r frontend/assets/images/. build_project/assets/images/ 2>/dev/null || true
+          fi
+          if [ -d frontend/assets/videos ]; then
+            cp -r frontend/assets/videos/. build_project/assets/videos/ 2>/dev/null || true
+          fi
+
+      - name: Set minSdk 21 in build.gradle
+        run: |
+          GRADLE_FILE="build_project/android/app/build.gradle"
+          cat $GRADLE_FILE
+          sed -i 's/minSdk = flutter\.minSdkVersion/minSdk = 21/' $GRADLE_FILE
+          sed -i 's/minSdkVersion flutter\.minSdkVersion/minSdkVersion 21/' $GRADLE_FILE
+          sed -i 's/minSdk flutter\.minSdkVersion/minSdk 21/' $GRADLE_FILE
+          echo "--- After patch ---"
+          cat $GRADLE_FILE
 
       - name: Get Flutter packages
-        working-directory: frontend
+        working-directory: build_project
         run: flutter pub get
 
       - name: Build Release APK
-        working-directory: frontend
+        working-directory: build_project
         run: flutter build apk --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: zhakas-fashion-release-apk
-          path: frontend/build/app/outputs/flutter-apk/app-release.apk
+          path: build_project/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30

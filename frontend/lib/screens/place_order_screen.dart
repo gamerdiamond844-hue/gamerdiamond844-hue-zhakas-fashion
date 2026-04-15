@@ -236,9 +236,9 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                               ),
                   ),
                 ),
-                if (_proofUrl != null) Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(children: const [Icon(Icons.check_circle, color: Colors.green, size: 16), SizedBox(width: 6), Text('Screenshot uploaded', style: TextStyle(color: Colors.green, fontSize: 13))]),
+                if (_proofUrl != null) const Padding(
+                  padding: EdgeInsets.only(top: 8),
+                  child: Row(children: [Icon(Icons.check_circle, color: Colors.green, size: 16), SizedBox(width: 6), Text('Screenshot uploaded', style: TextStyle(color: Colors.green, fontSize: 13))]),
                 ),
               ],
             ),

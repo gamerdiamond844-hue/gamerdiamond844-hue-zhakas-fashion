@@ -16,11 +16,10 @@ class AppTheme {
     brightness: Brightness.light,
     scaffoldBackgroundColor: background,
     primaryColor: green,
-    colorScheme: ColorScheme.light(
+    colorScheme: const ColorScheme.light(
       primary: green,
       secondary: gold,
       surface: surface,
-      background: background,
       onPrimary: Colors.white,
       onSecondary: Colors.white,
     ),
@@ -88,7 +87,6 @@ class AppTheme {
     ),
   );
 
-  // Gradient helpers
   static const LinearGradient greenGold = LinearGradient(
     colors: [green, greenLight],
     begin: Alignment.topLeft,
