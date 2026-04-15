@@ -25,17 +25,29 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Get Flutter packages
+      - name: Create temporary Flutter app project for build
         working-directory: frontend
+        run: |
+          rm -rf .flutter_build_temp
+          mkdir .flutter_build_temp
+          cd .flutter_build_temp
+          flutter create --project-name zhakass_fashion .
+          rm -rf lib assets pubspec.yaml
+          cp -r ../lib .
+          cp -r ../assets .
+          cp ../pubspec.yaml .
+
+      - name: Get Flutter packages
+        working-directory: frontend/.flutter_build_temp
         run: flutter pub get
 
       - name: Build Release APK
-        working-directory: frontend
+        working-directory: frontend/.flutter_build_temp
         run: flutter build apk --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: zhakas-fashion-release-apk
-          path: frontend/build/app/outputs/flutter-apk/app-release.apk
+          path: frontend/.flutter_build_temp/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
