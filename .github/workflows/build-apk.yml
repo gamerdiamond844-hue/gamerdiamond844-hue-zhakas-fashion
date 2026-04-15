@@ -44,6 +44,14 @@ jobs:
             cp -r frontend/assets/videos/. build_project/assets/videos/ 2>/dev/null || true
           fi
 
+      - name: Add internet permission to AndroidManifest
+        run: |
+          MANIFEST="build_project/android/app/src/main/AndroidManifest.xml"
+          sed -i 's/<manifest/<manifest/' $MANIFEST
+          sed -i 's/<application/<uses-permission android:name="android.permission.INTERNET"\/><application/' $MANIFEST
+          echo "--- Manifest ---"
+          cat $MANIFEST
+
       - name: Set minSdk 21 in build.gradle
         run: |
           GRADLE_FILE="build_project/android/app/build.gradle"
