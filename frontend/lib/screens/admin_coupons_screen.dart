@@ -204,19 +204,34 @@ class _CouponFormSheet extends StatefulWidget {
 
 class _CouponFormSheetState extends State<_CouponFormSheet> {
   final _formKey = GlobalKey<FormState>();
-  late final _codeCtrl = TextEditingController(text: widget.coupon?['code'] ?? '');
-  late final _valueCtrl = TextEditingController(text: widget.coupon?['discount_value']?.toString() ?? '');
-  late final _minCtrl = TextEditingController(text: widget.coupon?['minimum_order_value']?.toString() ?? '0');
-  late final _maxCtrl = TextEditingController(text: widget.coupon?['maximum_discount']?.toString() ?? '');
-  late final _limitCtrl = TextEditingController(text: widget.coupon?['usage_limit']?.toString() ?? '0');
-  late final _perUserCtrl = TextEditingController(text: widget.coupon?['per_user_limit']?.toString() ?? '1');
-  late String _type = widget.coupon?['discount_type'] ?? 'percentage';
-  late String _applicable = widget.coupon?['applicable_to'] ?? 'all';
-  late bool _firstTime = widget.coupon?['first_time_user'] ?? false;
-  DateTime _expiry = widget.coupon?['expiry_date'] != null
-      ? DateTime.tryParse(widget.coupon!['expiry_date'] as String) ?? DateTime.now().add(const Duration(days: 30))
-      : DateTime.now().add(const Duration(days: 30));
+  late final TextEditingController _codeCtrl;
+  late final TextEditingController _valueCtrl;
+  late final TextEditingController _minCtrl;
+  late final TextEditingController _maxCtrl;
+  late final TextEditingController _limitCtrl;
+  late final TextEditingController _perUserCtrl;
+  late String _type;
+  late String _applicable;
+  late bool _firstTime;
+  late DateTime _expiry;
   bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _codeCtrl = TextEditingController(text: widget.coupon?['code'] as String? ?? '');
+    _valueCtrl = TextEditingController(text: widget.coupon?['discount_value']?.toString() ?? '');
+    _minCtrl = TextEditingController(text: widget.coupon?['minimum_order_value']?.toString() ?? '0');
+    _maxCtrl = TextEditingController(text: widget.coupon?['maximum_discount']?.toString() ?? '');
+    _limitCtrl = TextEditingController(text: widget.coupon?['usage_limit']?.toString() ?? '0');
+    _perUserCtrl = TextEditingController(text: widget.coupon?['per_user_limit']?.toString() ?? '1');
+    _type = widget.coupon?['discount_type'] as String? ?? 'percentage';
+    _applicable = widget.coupon?['applicable_to'] as String? ?? 'all';
+    _firstTime = widget.coupon?['first_time_user'] as bool? ?? false;
+    _expiry = widget.coupon?['expiry_date'] != null
+        ? DateTime.tryParse(widget.coupon!['expiry_date'] as String) ?? DateTime.now().add(const Duration(days: 30))
+        : DateTime.now().add(const Duration(days: 30));
+  }
 
   void _autoGenCode() {
     final chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

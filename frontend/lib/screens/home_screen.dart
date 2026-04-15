@@ -410,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget _filterProducts(List<Product> all, String filter) {
+  List<Product> _filterProducts(List<Product> all, String filter) {
     final base = _filterByCategory(all);
     switch (filter) {
       case 'trending': return base.where((p) => p.isTrending).toList().isEmpty ? base.take(4).toList() : base.where((p) => p.isTrending).toList();
@@ -418,16 +418,6 @@ class _HomeScreenState extends State<HomeScreen> {
       case 'saree': return base.where((p) => p.title.toLowerCase().contains('saree')).toList();
       case 'lehenga': return base.where((p) => p.title.toLowerCase().contains('lehenga')).toList();
       default: return base;
-    }
-  }
-
-  Widget _buildSectionTitle(String filter) {
-    switch (filter) {
-      case 'trending': return '🔥 Trending Deals';
-      case 'featured': return '🆕 New Launches';
-      case 'saree': return '👗 Saree Collections';
-      case 'lehenga': return '💃 Lehenga Collections';
-      default: return 'Collections';
     }
   }
 

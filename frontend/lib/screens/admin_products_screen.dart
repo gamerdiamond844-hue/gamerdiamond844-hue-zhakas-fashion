@@ -151,17 +151,31 @@ class _ProductFormSheet extends StatefulWidget {
 
 class _ProductFormSheetState extends State<_ProductFormSheet> {
   final _formKey = GlobalKey<FormState>();
-  late final TextEditingController _title = TextEditingController(text: widget.product?.title ?? '');
-  late final TextEditingController _desc = TextEditingController(text: widget.product?.description ?? '');
-  late final TextEditingController _price = TextEditingController(text: widget.product?.price.toString() ?? '');
-  late final TextEditingController _discount = TextEditingController(text: widget.product?.discount.toString() ?? '0');
-  late final TextEditingController _stock = TextEditingController(text: widget.product?.stock.toString() ?? '0');
-  late final TextEditingController _catId = TextEditingController(text: widget.product != null ? '1' : '1');
-  late bool _trending = widget.product?.isTrending ?? false;
-  late bool _featured = widget.product?.isFeatured ?? false;
-  List<String> _images = List.from(widget.product?.images ?? []);
+  late final TextEditingController _title;
+  late final TextEditingController _desc;
+  late final TextEditingController _price;
+  late final TextEditingController _discount;
+  late final TextEditingController _stock;
+  late final TextEditingController _catId;
+  late bool _trending;
+  late bool _featured;
+  late List<String> _images;
   bool _saving = false;
   bool _uploading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _title = TextEditingController(text: widget.product?.title ?? '');
+    _desc = TextEditingController(text: widget.product?.description ?? '');
+    _price = TextEditingController(text: widget.product?.price.toString() ?? '');
+    _discount = TextEditingController(text: widget.product?.discount.toString() ?? '0');
+    _stock = TextEditingController(text: widget.product?.stock.toString() ?? '0');
+    _catId = TextEditingController(text: '1');
+    _trending = widget.product?.isTrending ?? false;
+    _featured = widget.product?.isFeatured ?? false;
+    _images = List.from(widget.product?.images ?? []);
+  }
 
   Future<void> _uploadImage() async {
     final picker = ImagePicker();
