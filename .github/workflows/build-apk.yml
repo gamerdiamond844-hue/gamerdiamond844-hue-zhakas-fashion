@@ -34,7 +34,9 @@ jobs:
           flutter create --project-name zhakass_fashion .
           rm -rf lib assets pubspec.yaml
           cp -r ../lib .
-          cp -r ../assets .
+          if [ -d ../assets ]; then
+            cp -r ../assets .
+          fi
           cp ../pubspec.yaml .
 
       - name: Get Flutter packages
