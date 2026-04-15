@@ -34,10 +34,14 @@ jobs:
           flutter create --project-name zhakass_fashion .
           rm -rf lib assets pubspec.yaml
           cp -r ../lib .
-          if [ -d ../assets ]; then
-            cp -r ../assets .
-          fi
           cp ../pubspec.yaml .
+          mkdir -p assets/images assets/videos
+          if [ -d ../assets/images ] && [ "$(ls -A ../assets/images 2>/dev/null)" ]; then
+            cp -r ../assets/images/. assets/images/
+          fi
+          if [ -d ../assets/videos ] && [ "$(ls -A ../assets/videos 2>/dev/null)" ]; then
+            cp -r ../assets/videos/. assets/videos/
+          fi
 
       - name: Get Flutter packages
         working-directory: frontend/.flutter_build_temp

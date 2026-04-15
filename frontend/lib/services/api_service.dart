@@ -1,8 +1,13 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = 'http://10.0.2.2:8000/api/v1';
+  static String get baseUrl {
+    if (Platform.isAndroid) return 'http://10.0.2.2:8000/api/v1';
+    if (Platform.isIOS) return 'http://127.0.0.1:8000/api/v1';
+    return 'http://localhost:8000/api/v1';
+  }
 
   static Map<String, String> _headers({String? token, bool form = false}) => {
     'Content-Type': form ? 'application/x-www-form-urlencoded' : 'application/json',

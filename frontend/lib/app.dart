@@ -9,7 +9,7 @@ class ZHAKASApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ZHAKAS FASHION',
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.light,
       debugShowCheckedModeBanner: false,
       initialRoute: Routes.splash,
       routes: Routes.routes,

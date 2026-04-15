@@ -20,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _searchCtrl = TextEditingController();
   String _searchQuery = '';
+  int _selectedCategory = 0;
 
   @override
   void initState() {
@@ -200,10 +201,10 @@ class _HomeScreenState extends State<HomeScreen> {
         separatorBuilder: (_, __) => const SizedBox(width: 8),
         itemBuilder: (_, i) => FilterChip(
           label: Text(categories[i]),
-          selected: i == 0,
-          onSelected: (_) {},
+          selected: _selectedCategory == i,
+          onSelected: (_) => setState(() => _selectedCategory = i),
           selectedColor: AppTheme.green,
-          labelStyle: TextStyle(color: i == 0 ? Colors.white : AppTheme.textDark, fontWeight: FontWeight.w500),
+          labelStyle: TextStyle(color: _selectedCategory == i ? Colors.white : AppTheme.textDark, fontWeight: FontWeight.w500),
           backgroundColor: Colors.white,
           side: const BorderSide(color: Color(0xFFDDD8CC)),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -399,13 +400,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _filterProducts(List<Product> all, String filter) {
-    switch (filter) {
-      case 'trending': return all.where((p) => p.isTrending).toList().isEmpty ? all.take(4).toList() : all.where((p) => p.isTrending).toList();
-      case 'featured': return all.where((p) => p.isFeatured).toList().isEmpty ? all.take(4).toList() : all.where((p) => p.isFeatured).toList();
-      case 'saree': return all.where((p) => p.title.toLowerCase().contains('saree')).toList();
-      case 'lehenga': return all.where((p) => p.title.toLowerCase().contains('lehenga')).toList();
+  List<Product> _filterByCategory(List<Product> all) {
+    switch (_selectedCategory) {
+      case 1: return all.where((p) => p.title.toLowerCase().contains('saree')).toList();
+      case 2: return all.where((p) => p.title.toLowerCase().contains('lehenga')).toList();
+      case 3: return all.where((p) => p.isTrending).toList();
+      case 4: return all.where((p) => p.isFeatured).toList();
       default: return all;
+    }
+  }
+
+  Widget _filterProducts(List<Product> all, String filter) {
+    final base = _filterByCategory(all);
+    switch (filter) {
+      case 'trending': return base.where((p) => p.isTrending).toList().isEmpty ? base.take(4).toList() : base.where((p) => p.isTrending).toList();
+      case 'featured': return base.where((p) => p.isFeatured).toList().isEmpty ? base.take(4).toList() : base.where((p) => p.isFeatured).toList();
+      case 'saree': return base.where((p) => p.title.toLowerCase().contains('saree')).toList();
+      case 'lehenga': return base.where((p) => p.title.toLowerCase().contains('lehenga')).toList();
+      default: return base;
     }
   }
 
