@@ -3,7 +3,7 @@ name: Build ZHAKAS FASHION APK
 on:
   push:
     branches: [main, master]
-  workflow_dispatch:  # allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build-apk:
@@ -25,35 +25,28 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Create temporary Flutter app project for build
+      - name: Create Android project files
         working-directory: frontend
         run: |
-          rm -rf .flutter_build_temp
-          mkdir .flutter_build_temp
-          cd .flutter_build_temp
-          flutter create --project-name zhakass_fashion .
-          rm -rf lib assets pubspec.yaml
-          cp -r ../lib .
-          cp ../pubspec.yaml .
-          mkdir -p assets/images assets/videos
-          if [ -d ../assets/images ] && [ "$(ls -A ../assets/images 2>/dev/null)" ]; then
-            cp -r ../assets/images/. assets/images/
-          fi
-          if [ -d ../assets/videos ] && [ "$(ls -A ../assets/videos 2>/dev/null)" ]; then
-            cp -r ../assets/videos/. assets/videos/
-          fi
+          flutter create --project-name zhakass_fashion --platforms android .
+
+      - name: Set minSdkVersion for flutter_secure_storage
+        working-directory: frontend/android/app
+        run: |
+          sed -i 's/minSdk flutter.minSdkVersion/minSdk 21/' build.gradle
+          sed -i 's/minSdkVersion flutter.minSdkVersion/minSdk 21/' build.gradle
 
       - name: Get Flutter packages
-        working-directory: frontend/.flutter_build_temp
+        working-directory: frontend
         run: flutter pub get
 
       - name: Build Release APK
-        working-directory: frontend/.flutter_build_temp
+        working-directory: frontend
         run: flutter build apk --release
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: zhakas-fashion-release-apk
-          path: frontend/.flutter_build_temp/build/app/outputs/flutter-apk/app-release.apk
+          path: frontend/build/app/outputs/flutter-apk/app-release.apk
           retention-days: 30
